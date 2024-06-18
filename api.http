@@ -1,0 +1,59 @@
+@port = 3001
+###
+GET http://localhost:{{port}}/events
+
+###
+# @name createEvent
+POST http://localhost:{{port}}/events
+Content-Type: application/json
+
+{
+  "name": "Elon musk Event",
+  "date": "2024-06-17T16:55:29.011Z",
+  "description": "Esse é o evento do elon musquinho",
+  "price": 665
+}
+
+###
+@eventId = {{ createEvent.response.body.id }}
+
+###
+GET http://localhost:{{port}}/events/{{ eventId }}
+
+###
+PATCH http://localhost:{{port}}/events/{{ eventId }}
+Content-Type: application/json
+
+{
+  "name": "Elon musk ",
+  "date": "2024-06-17T16:55:29.011Z",
+  "description": "Esse é o evento do elon musquinho",
+  "price": 665
+}
+
+###
+DELETE  http://localhost:{{port}}/events/{{ eventId }}
+
+
+###
+# @name createSpot
+POST http://localhost:{{port}}/events/{{ eventId }}/spots
+Content-Type: application/json
+
+{
+  "name": "A2"
+}
+
+###
+
+@spotName = {{ createSpot.response.body.name }}
+
+POST http://localhost:{{port}}/events/{{ eventId }}/reserve
+Content-Type: application/json
+X-Api-Token: 321
+
+{
+  "spots": ["{{ spotName }}"],
+  "ticket_kind": "full",
+  "email": "test@test.com"
+}
